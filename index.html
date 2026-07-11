@@ -19,29 +19,39 @@
     <nav class="navbar">
         <div class="container navbar-container">
             <div class="logo">
-                <h2>مون فالي<span>.</span></h2>
+                <h2>فيلا R13<span>.</span></h2>
             </div>
             <ul class="nav-links">
                 <li><a href="#home">الرئيسية</a></li>
-                <li><a href="#overview">التفاصيل</a></li>
+                <li><a href="#overview">نظرة عامة</a></li>
                 <li><a href="#features">المواصفات</a></li>
-                <li><a href="#floors">الأدوار</a></li>
-                <li><a href="#gallery">المعرض</a></li>
+                <li><a href="#gallery">معرض الصور</a></li>
             </ul>
             <div class="nav-contact">
-                <a href="https://wa.me/201222142623" target="_blank" class="btn-primary-outline"><i class="fa-brands fa-whatsapp"></i> تواصل معنا</a>
+                <a href="https://wa.me/201222142623" target="_blank" class="btn-whatsapp-outline"><i class="fa-brands fa-whatsapp"></i> تواصل معنا</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header id="home" class="hero" style="background-image: linear-gradient(rgba(11, 36, 71, 0.7), rgba(11, 36, 71, 0.7)), url('images/villa-r13-hero.webp');">
+    <!-- Hero Section (Slider) -->
+    <header id="home" class="hero">
+        <div class="hero-slider">
+            <div class="hero-slide active" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-hero.webp');"></div>
+            <div class="hero-slide" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-gallery-1.webp');"></div>
+            <div class="hero-slide" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-gallery-2.webp');"></div>
+            <div class="hero-slide" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-gallery-3.webp');"></div>
+            <div class="hero-slide" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-gallery-4.webp');"></div>
+        </div>
         <div class="hero-content fade-in-up">
             <span class="badge">الأفضل بالكمبوند بالكامل</span>
-            <h1>فيلا R13 الفاخرة</h1>
-            <p>كمبوند مون فالي 2 - توين هاوس كورنر جاهزة للسكن فوراً بمستوى ألترا ديلوكس</p>
-            <a href="https://wa.me/201222142623" target="_blank" class="btn-primary"><i class="fa-brands fa-whatsapp"></i> احجز معاينتك الآن</a>
+            <h1>فيلا للبيع</h1>
+            <p class="owner-direct">(من المالك مباشرة)</p>
+            <a href="https://wa.me/201222142623" target="_blank" class="btn-whatsapp btn-large"><i class="fa-brands fa-whatsapp"></i> احجز معاينتك الآن</a>
         </div>
+        <!-- Slider Controls -->
+        <button class="slider-arrow prev-slide" aria-label="الصورة السابقة"><i class="fa-solid fa-chevron-right"></i></button>
+        <button class="slider-arrow next-slide" aria-label="الصورة التالية"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="slider-dots"></div>
     </header>
 
     <!-- Overview Section -->
@@ -143,53 +153,8 @@
         </div>
     </section>
 
-    <!-- Floors Section -->
-    <section id="floors" class="floors section-padding">
-        <div class="container">
-            <div class="section-title">
-                <h2>تقسيم الأدوار</h2>
-                <div class="divider"></div>
-            </div>
-            
-            <div class="floor-timeline">
-                <div class="floor-item fade-in">
-                    <div class="floor-marker">الأرضي</div>
-                    <div class="floor-content">
-                        <h3>الدور الأرضي</h3>
-                        <p>يحتوي على المدخل الخلفي وحديقة (200م) + منطقة جلوس خارجية (50م) + مخزن خارجي (16م).</p>
-                        <p>مقسم داخلياً إلى 2 منطقة جلوس بأرضيات بورسلين إسباني، مخزن داخلي (9م)، غرفة متعددة الاستخدامات (30م)، حمام ضيوف ديورفيت ألماني وبورسلين إسباني، غرفة خدم بحمام خاص، وغرفة غسيل بمنشر خارجي.</p>
-                    </div>
-                </div>
-
-                <div class="floor-item fade-in">
-                    <div class="floor-marker">الأول</div>
-                    <div class="floor-content">
-                        <h3>الدور الأول</h3>
-                        <p>باب الفيلا الرئيسي، المطبخ، مغسلة يد للضيوف، حمام ضيوف (ديورفيت ألماني).</p>
-                        <p>منطقة سفرة ومنطقة جلوس ضيافة كبيرة مفتوحة بأرضيات رخام برتغالي أبيض بتجزيعة رمادي فاتح (أندر وأغلى الأنواع)، وبلكونة تطل على الحديقة.</p>
-                    </div>
-                </div>
-
-                <div class="floor-item fade-in">
-                    <div class="floor-marker">الثاني</div>
-                    <div class="floor-content">
-                        <h3>الدور الثاني</h3>
-                        <p><strong>الجناح الرئيسي:</strong> أرضيات HDF ألماني (كورونو)، غرفة نوم كبيرة، دريسنج، حمام رئيسي (ديورفيت) شاور كابين إيطالي، وجاكوزي (10 مضخات هواء + 12 مياه).</p>
-                        <p><strong>غرف إضافية:</strong> 2 غرفة نوم HDF ألماني ببلكونة كبيرة مطلة على الحدائق، يخدمهما حمام (ديورفيت) بشاور كابين إيطالي.</p>
-                        <p>مخزن 8 متر، هاند ريل خشب (بيتش باين) مموج CNC لربط الأدوار، ودهانات يوتن قابلة للغسيل بالكامل.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="notes fade-in">
-                <p><i class="fa-solid fa-circle-check" style="color: var(--primary-color);"></i> لا يوجد أي مديونية على الفيلا (خالصة الثمن) ولا مخالفات.</p>
-                <p><i class="fa-solid fa-circle-info" style="color: var(--text-light);"></i> يتحمل المشتري 5% من قيمة الوحدة كنقل ملكية تسدد في إدارة الكمبوند.</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Gallery Section -->
-    <section id="gallery" class="gallery section-padding bg-light">
+    <section id="gallery" class="gallery section-padding">
         <div class="container">
             <div class="section-title">
                 <h2>معرض الصور</h2>
@@ -210,7 +175,7 @@
         <div class="container text-center fade-in">
             <h2>هل أنت مستعد لمعاينة الفيلا؟</h2>
             <p>تواصل معنا الآن لتحديد موعد المعاينة أو للحصول على مزيد من التفاصيل</p>
-            <a href="https://wa.me/201222142623" target="_blank" class="btn-primary btn-large">
+            <a href="https://wa.me/201222142623" target="_blank" class="btn-whatsapp btn-large">
                 <i class="fa-brands fa-whatsapp"></i> تواصل عبر الواتساب مباشرة
             </a>
         </div>
@@ -223,7 +188,7 @@
                 <!-- About -->
                 <div class="footer-about">
                     <div class="logo">
-                        <h2>مون فالي<span>.</span></h2>
+                        <h2>فيلا R13<span>.</span></h2>
                     </div>
                     <p>أرقى الفيلات في كمبوند مون فالي 2. تصميم عصري، مساحات واسعة، ورفاهية لا تضاهى لتناسب طموحاتك.</p>
                 </div>
@@ -232,8 +197,8 @@
                     <h3>روابط سريعة</h3>
                     <ul>
                         <li><a href="#home">الرئيسية</a></li>
-                        <li><a href="#overview">التفاصيل والمساحات</a></li>
-                        <li><a href="#features">المواصفات الاستثنائية</a></li>
+                        <li><a href="#overview">نظرة عامة</a></li>
+                        <li><a href="#features">المواصفات</a></li>
                         <li><a href="#gallery">معرض الصور</a></li>
                     </ul>
                 </div>
@@ -248,10 +213,15 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 جميع الحقوق محفوظة لبيع فيلا R13 في مون فالي 2.</p>
+                <p>&copy; 2026 جميع الحقوق محفوظة - فيلا R13 في كمبوند مون فالي 2.</p>
             </div>
         </div>
     </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/201222142623" target="_blank" class="whatsapp-float" aria-label="تواصل معنا عبر الواتساب">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
     <!-- Custom JS -->
     <script src="js/main.js"></script>
