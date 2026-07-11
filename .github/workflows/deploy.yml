@@ -1,0 +1,31 @@
+name: Deploy to FTP Shared Host
+
+on:
+  push:
+    branches:
+      - main # Change this to your default branch if different
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        # The local-dir is '.' because the index.html is at the root
+        local-dir: ./
+        exclude: |
+          **/.git*
+          **/.git*/**
+          .github/**
+          files/
+          *.docx
+        # NOTE: If your shared host does not have the 'images' and 'files' folder yet,
+        # you can remove them from exclude above to sync them once.
