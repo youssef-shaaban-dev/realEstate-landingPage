@@ -1,47 +1,146 @@
+// =====================
+// YouTube Players Integration
+// =====================
+let bgPlayer;
+let lightboxPlayer;
+const videoId = 'tNboS5Ie4zI';
+
+window.onYouTubeIframeAPIReady = function() {
+    // 1. Background Player
+    bgPlayer = new YT.Player('bg-video-player', {
+        videoId: videoId,
+        playerVars: {
+            'autoplay': 1,
+            'mute': 1,
+            'loop': 1,
+            'playlist': videoId,
+            'controls': 0,
+            'showinfo': 0,
+            'rel': 0,
+            'modestbranding': 1,
+            'playsinline': 1,
+            'disablekb': 1,
+            'fs': 0
+        },
+        events: {
+            'onReady': onBgPlayerReady,
+            'onStateChange': onBgPlayerStateChange
+        }
+    });
+
+    // 2. Lightbox Player (Loaded but paused initially)
+    lightboxPlayer = new YT.Player('lightbox-player', {
+        videoId: videoId,
+        playerVars: {
+            'autoplay': 0,
+            'controls': 1,
+            'rel': 0,
+            'modestbranding': 1,
+            'playsinline': 1
+        }
+    });
+};
+
+function onBgPlayerReady(event) {
+    event.target.mute();
+    event.target.playVideo();
+}
+
+function onBgPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING) {
+        const fallback = document.querySelector('.video-fallback');
+        if (fallback) {
+            fallback.classList.add('fade-out');
+        }
+    }
+    if (event.data === YT.PlayerState.ENDED) {
+        event.target.playVideo(); // Force continuous loop
+    }
+}
+
+// In case the YouTube API script loaded before main.js executed
+if (window.YT && window.YT.Player) {
+    window.onYouTubeIframeAPIReady();
+}
+
 document.addEventListener("DOMContentLoaded", function() {
 
     // =====================
-    // Hero Slider
+    // Video Controls & Lightbox Interaction
     // =====================
-    const slides = document.querySelectorAll('.hero-slide');
-    const dotsContainer = document.querySelector('.slider-dots');
-    const prevBtn = document.querySelector('.prev-slide');
-    const nextBtn = document.querySelector('.next-slide');
-    let currentSlide = 0;
-    let autoSlideTimer;
+    const toggleSoundBtn = document.getElementById('toggle-sound-btn');
+    const watchTourBtn = document.getElementById('watch-tour-btn');
+    const videoLightbox = document.getElementById('video-lightbox');
+    const closeModalBtn = videoLightbox ? videoLightbox.querySelector('.close-modal') : null;
 
-    if (slides.length > 0) {
-        // Create dots
-        slides.forEach((_, i) => {
-            const dot = document.createElement('button');
-            dot.classList.add('slider-dot');
-            if (i === 0) dot.classList.add('active');
-            dot.addEventListener('click', () => goToSlide(i));
-            dotsContainer.appendChild(dot);
+    if (toggleSoundBtn) {
+        toggleSoundBtn.addEventListener('click', function() {
+            if (bgPlayer && typeof bgPlayer.isMuted === 'function') {
+                if (bgPlayer.isMuted()) {
+                    bgPlayer.unMute();
+                    toggleSoundBtn.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+                    toggleSoundBtn.setAttribute('aria-label', 'كتم الصوت');
+                } else {
+                    bgPlayer.mute();
+                    toggleSoundBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+                    toggleSoundBtn.setAttribute('aria-label', 'تشغيل الصوت');
+                }
+            }
         });
+    }
 
-        function goToSlide(index) {
-            slides[currentSlide].classList.remove('active');
-            dotsContainer.children[currentSlide].classList.remove('active');
-            currentSlide = (index + slides.length) % slides.length;
-            slides[currentSlide].classList.add('active');
-            dotsContainer.children[currentSlide].classList.add('active');
-            resetTimer();
+    if (watchTourBtn && videoLightbox) {
+        watchTourBtn.addEventListener('click', function() {
+            videoLightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            
+            // Pause background video to save bandwidth
+            if (bgPlayer && typeof bgPlayer.pauseVideo === 'function') {
+                bgPlayer.pauseVideo();
+            }
+            
+            // Play lightbox video with sound
+            if (lightboxPlayer && typeof lightboxPlayer.playVideo === 'function') {
+                lightboxPlayer.unMute();
+                lightboxPlayer.playVideo();
+            }
+        });
+    }
+
+    function closeVideoLightbox() {
+        if (videoLightbox) {
+            videoLightbox.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+            
+            // Pause lightbox video
+            if (lightboxPlayer && typeof lightboxPlayer.pauseVideo === 'function') {
+                lightboxPlayer.pauseVideo();
+            }
+            
+            // Resume background video (muted)
+            if (bgPlayer && typeof bgPlayer.playVideo === 'function') {
+                bgPlayer.mute();
+                // Update sound button state back to muted
+                if (toggleSoundBtn) {
+                    toggleSoundBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
+                    toggleSoundBtn.setAttribute('aria-label', 'تشغيل الصوت');
+                }
+                bgPlayer.playVideo();
+            }
         }
+    }
 
-        function nextSlide() { goToSlide(currentSlide + 1); }
-        function prevSlide() { goToSlide(currentSlide - 1); }
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeVideoLightbox);
+    }
 
-        function resetTimer() {
-            clearInterval(autoSlideTimer);
-            autoSlideTimer = setInterval(nextSlide, 5000);
-        }
-
-        if (prevBtn) prevBtn.addEventListener('click', prevSlide);
-        if (nextBtn) nextBtn.addEventListener('click', nextSlide);
-
-        // Auto-advance
-        autoSlideTimer = setInterval(nextSlide, 5000);
+    if (videoLightbox) {
+        // Close modal if clicked outside the content box
+        videoLightbox.addEventListener('click', function(e) {
+            if (e.target === videoLightbox) {
+                closeVideoLightbox();
+            }
+        });
     }
 
     // =====================

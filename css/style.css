@@ -242,87 +242,175 @@ img {
     padding-top: 80px;
 }
 
-/* Hero Slider */
-.hero-slider {
+/* Hero Video Background */
+.video-background-container {
     position: absolute;
     inset: 0;
     z-index: 0;
+    overflow: hidden;
 }
 
-.hero-slide {
+.video-fallback {
     position: absolute;
     inset: 0;
     background-size: cover;
     background-position: center;
+    z-index: 1;
+    transition: opacity 1.5s ease;
+}
+
+.video-fallback.fade-out {
     opacity: 0;
-    transition: opacity 1.2s ease-in-out;
+    pointer-events: none;
 }
 
-.hero-slide.active {
-    opacity: 1;
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(30, 15, 0, 0.65), rgba(30, 15, 0, 0.75));
+    z-index: 2;
 }
 
-/* Slider Arrows */
-.slider-arrow {
+.video-foreground {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    width: 100vw;
+    height: 56.25vw; /* 100 * 9 / 16 (16:9 ratio) */
+    min-height: 100vh;
+    min-width: 177.77vh; /* 100 * 16 / 9 */
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.video-foreground iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Sound Control Button */
+.sound-control-btn {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
     z-index: 10;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     color: #fff;
-    width: 52px;
-    height: 52px;
+    width: 54px;
+    height: 54px;
     border-radius: 50%;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     cursor: pointer;
     transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: var(--shadow-md);
 }
 
-.slider-arrow:hover {
-    background: rgba(37, 211, 102, 0.7);
-    border-color: #25D366;
+.sound-control-btn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: scale(1.1);
 }
 
-.prev-slide { right: 25px; }
-.next-slide { left: 25px; }
-
-/* Slider Dots */
-.slider-dots {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-    z-index: 10;
-}
-
-.slider-dot {
-    width: 28px;
-    height: 4px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.35);
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
-}
-
-.slider-dot.active {
-    width: 52px;
-    background: #25D366;
-    box-shadow: 0 0 10px rgba(37, 211, 102, 0.6);
-}
-
+/* Hero Content & Buttons */
 .hero-content {
     max-width: 900px;
     padding: 0 20px;
     z-index: 2;
     position: relative;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Video Lightbox Modal */
+.video-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 8, 0, 0.95);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(10px);
+}
+
+.video-modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.video-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    aspect-ratio: 16/9;
+    background: #000;
+    border: 2px solid var(--primary-color);
+    border-radius: 16px;
+    box-shadow: 0 0 50px rgba(192, 138, 75, 0.3);
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-modal.active .video-modal-content {
+    transform: scale(1);
+}
+
+.video-responsive-container {
+    width: 100%;
+    height: 100%;
+}
+
+.video-responsive-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: var(--transition);
+    z-index: 10;
+}
+
+.close-modal:hover {
+    background: rgba(239, 68, 68, 0.8);
+    color: #fff;
+    transform: rotate(90deg);
 }
 
 .badge {
@@ -790,6 +878,26 @@ footer {
 @media (max-width: 768px) {
     .hero h1 {
         font-size: 2.8rem;
+    }
+    .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+        width: 100%;
+    }
+    .hero-buttons .btn-large,
+    .hero-buttons a.btn-large {
+        width: 100%;
+        max-width: 320px;
+        font-size: 1.1rem;
+        padding: 14px 25px;
+    }
+    .sound-control-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 46px;
+        height: 46px;
+        font-size: 1.1rem;
     }
     .section-title h2 {
         font-size: 2.2rem;

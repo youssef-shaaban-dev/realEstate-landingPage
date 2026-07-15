@@ -33,25 +33,31 @@
         </div>
     </nav>
 
-    <!-- Hero Section (Slider) -->
+    <!-- Hero Section (Video Background) -->
     <header id="home" class="hero">
-        <div class="hero-slider">
-            <div class="hero-slide active" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-hero.webp');"></div>
-            <div class="hero-slide" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-gallery-1.webp');"></div>
-            <div class="hero-slide" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-gallery-2.webp');"></div>
-            <div class="hero-slide" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-gallery-3.webp');"></div>
-            <div class="hero-slide" style="background-image: linear-gradient(rgba(30, 15, 0, 0.62), rgba(30, 15, 0, 0.62)), url('images/villa-r13-gallery-4.webp');"></div>
+        <div class="video-background-container">
+            <!-- Fallback Poster Image -->
+            <div class="video-fallback" style="background-image: linear-gradient(rgba(30, 15, 0, 0.6), rgba(30, 15, 0, 0.6)), url('images/villa-r13-hero.webp');"></div>
+            <!-- Overlay to darken video for text contrast -->
+            <div class="video-overlay"></div>
+            <!-- YouTube Player Container -->
+            <div class="video-foreground">
+                <div id="bg-video-player"></div>
+            </div>
         </div>
         <div class="hero-content fade-in-up">
             <span class="badge">الأفضل بالكمبوند بالكامل</span>
             <h1>فيلا للبيع</h1>
             <p class="owner-direct">(من المالك مباشرة)</p>
-            <a href="https://wa.me/201222142623" target="_blank" class="btn-whatsapp btn-large"><i class="fa-brands fa-whatsapp"></i> احجز معاينتك الآن</a>
+            <div class="hero-buttons">
+                <a href="https://wa.me/201222142623" target="_blank" class="btn-whatsapp btn-large"><i class="fa-brands fa-whatsapp"></i> احجز معاينتك الآن</a>
+                <button id="watch-tour-btn" class="btn-primary btn-large"><i class="fa-solid fa-play"></i> مشاهدة الجولة بالفيديو</button>
+            </div>
         </div>
-        <!-- Slider Controls -->
-        <button class="slider-arrow prev-slide" aria-label="الصورة السابقة"><i class="fa-solid fa-chevron-right"></i></button>
-        <button class="slider-arrow next-slide" aria-label="الصورة التالية"><i class="fa-solid fa-chevron-left"></i></button>
-        <div class="slider-dots"></div>
+        <!-- Sound Toggle Button -->
+        <button id="toggle-sound-btn" class="sound-control-btn" aria-label="تشغيل الصوت">
+            <i class="fa-solid fa-volume-xmark"></i>
+        </button>
     </header>
 
     <!-- Overview Section -->
@@ -223,6 +229,18 @@
         <i class="fa-brands fa-whatsapp"></i>
     </a>
 
+    <!-- Video Lightbox Modal -->
+    <div id="video-lightbox" class="video-modal">
+        <div class="video-modal-content">
+            <button class="close-modal" aria-label="إغلاق"><i class="fa-solid fa-xmark"></i></button>
+            <div class="video-responsive-container">
+                <div id="lightbox-player"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- YouTube Iframe Player API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <!-- Custom JS -->
     <script src="js/main.js"></script>
 </body>
