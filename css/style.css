@@ -718,6 +718,18 @@ img {
     display: block; /* Standard layout display */
 }
 
+/* Transparent shield to prevent right-click save and dragging on gallery images */
+.gallery-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    background: rgba(0, 0, 0, 0);
+}
+
 .gallery-item.hidden {
     display: none;
 }
@@ -727,6 +739,14 @@ img {
     height: 100%;
     object-fit: cover;
     transition: var(--transition);
+    /* Disable drag and select */
+    -webkit-user-drag: none;
+    user-drag: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 .gallery-item-info {
@@ -742,6 +762,7 @@ img {
     transition: var(--transition);
     pointer-events: none;
     text-align: right;
+    z-index: 6; /* above the shield */
 }
 
 .gallery-item-info span {

@@ -216,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function() {
         lightbox.appendChild(contentContainer);
 
         const lightboxImg = document.createElement('img');
-        lightboxImg.style.cssText = 'max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; transition: opacity 0.25s ease-in-out;';
+        lightboxImg.style.cssText = 'max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; transition: opacity 0.25s ease-in-out; pointer-events: none; -webkit-user-drag: none; user-select: none;';
         contentContainer.appendChild(lightboxImg);
 
         // Caption
@@ -344,5 +344,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
         });
+
+        // 3. Image protection: Disable contextmenu (right click) and dragstart on all gallery elements
+        lightbox.addEventListener('contextmenu', e => e.preventDefault());
     }
+
+    const disableImageProtection = () => {
+        document.querySelectorAll('.gallery-img, #lightbox img').forEach(img => {
+            img.addEventListener('contextmenu', e => e.preventDefault());
+            img.addEventListener('dragstart', e => e.preventDefault());
+        });
+    };
+    disableImageProtection();
+    // Run again in case elements are updated or rendered
+    window.addEventListener('load', disableImageProtection);
 });
