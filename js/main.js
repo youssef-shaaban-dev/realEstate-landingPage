@@ -166,35 +166,183 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // =====================
-    // Lightbox for Gallery Images
+    // Gallery Tab Filtering & Advanced Lightbox
     // =====================
-    const galleryImages = document.querySelectorAll('.gallery-img');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    
+    // 1. Filtering Logic
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active button
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            const filterValue = btn.getAttribute('data-filter');
+            
+            galleryItems.forEach(item => {
+                const category = item.getAttribute('data-category');
+                if (filterValue === 'all' || category === filterValue) {
+                    item.classList.remove('hidden');
+                    // Force display block for animation triggers
+                    setTimeout(() => {
+                        const img = item.querySelector('.gallery-img');
+                        if (img) img.classList.add('appear');
+                    }, 50);
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        });
+    });
 
-    if (galleryImages.length > 0) {
+    // 2. Lightbox with Navigation
+    if (galleryItems.length > 0) {
+        let activeItems = [];
+        let currentIndex = 0;
+
         const lightbox = document.createElement('div');
         lightbox.id = 'lightbox';
         lightbox.style.cssText = `
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); display: none; justify-content: center;
-            align-items: center; z-index: 2000; cursor: pointer;
+            background: rgba(15, 8, 3, 0.95); display: none; justify-content: center;
+            align-items: center; z-index: 2000; direction: ltr;
         `;
         document.body.appendChild(lightbox);
 
-        const lightboxImg = document.createElement('img');
-        lightboxImg.style.cssText = 'max-width: 90%; max-height: 90%; border-radius: 12px; box-shadow: 0 0 40px rgba(0,0,0,0.6);';
-        lightbox.appendChild(lightboxImg);
+        // Container for image and info
+        const contentContainer = document.createElement('div');
+        contentContainer.style.cssText = 'position: relative; max-width: 85%; max-height: 80%; display: flex; flex-direction: column; align-items: center;';
+        lightbox.appendChild(contentContainer);
 
-        galleryImages.forEach(img => {
-            img.addEventListener('click', () => {
-                lightboxImg.src = img.src;
-                lightbox.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
+        const lightboxImg = document.createElement('img');
+        lightboxImg.style.cssText = 'max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); object-fit: contain; transition: opacity 0.25s ease-in-out;';
+        contentContainer.appendChild(lightboxImg);
+
+        // Caption
+        const caption = document.createElement('div');
+        caption.style.cssText = 'color: #fff; margin-top: 15px; font-family: var(--font-family); font-weight: 700; font-size: 1.1rem; text-align: center; width: 100%; direction: rtl;';
+        contentContainer.appendChild(caption);
+
+        // Navigation arrows
+        const prevBtn = document.createElement('button');
+        prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+        prevBtn.style.cssText = `
+            position: absolute; left: 30px; top: 50%; transform: translateY(-50%);
+            background: rgba(192, 138, 75, 0.2); border: 1px solid rgba(192, 138, 75, 0.4);
+            color: #fff; width: 56px; height: 56px; border-radius: 50%; cursor: pointer;
+            font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; z-index: 2100;
+        `;
+        lightbox.appendChild(prevBtn);
+
+        const nextBtn = document.createElement('button');
+        nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+        nextBtn.style.cssText = `
+            position: absolute; right: 30px; top: 50%; transform: translateY(-50%);
+            background: rgba(192, 138, 75, 0.2); border: 1px solid rgba(192, 138, 75, 0.4);
+            color: #fff; width: 56px; height: 56px; border-radius: 50%; cursor: pointer;
+            font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease; z-index: 2100;
+        `;
+        lightbox.appendChild(nextBtn);
+
+        // Close button
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        closeBtn.style.cssText = `
+            position: absolute; top: 20px; right: 30px;
+            background: none; border: none; color: #fff; cursor: pointer;
+            font-size: 2.2rem; display: flex; align-items: center; justify-content: center;
+            transition: color 0.3s ease; z-index: 2100;
+        `;
+        lightbox.appendChild(closeBtn);
+
+        // Hover effects
+        [prevBtn, nextBtn].forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.background = 'var(--primary-color)';
+                btn.style.borderColor = 'transparent';
+                btn.style.boxShadow = '0 0 15px rgba(192, 138, 75, 0.5)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.background = 'rgba(192, 138, 75, 0.2)';
+                btn.style.borderColor = 'rgba(192, 138, 75, 0.4)';
+                btn.style.boxShadow = 'none';
             });
         });
 
-        lightbox.addEventListener('click', () => {
+        closeBtn.addEventListener('mouseenter', () => closeBtn.style.color = 'var(--primary-color)');
+        closeBtn.addEventListener('mouseleave', () => closeBtn.style.color = '#fff');
+
+        // Functions
+        function updateActiveItems() {
+            activeItems = Array.from(galleryItems).filter(item => !item.classList.contains('hidden'));
+        }
+
+        function showImage(index) {
+            if (index < 0) index = activeItems.length - 1;
+            if (index >= activeItems.length) index = 0;
+            currentIndex = index;
+
+            const item = activeItems[currentIndex];
+            const img = item.querySelector('.gallery-img');
+            
+            lightboxImg.style.opacity = '0';
+            setTimeout(() => {
+                lightboxImg.src = img.src;
+                caption.textContent = img.alt || '';
+                lightboxImg.style.opacity = '1';
+            }, 150);
+        }
+
+        // Event Listeners
+        galleryItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                updateActiveItems();
+                const index = activeItems.indexOf(item);
+                if (index !== -1) {
+                    showImage(index);
+                    lightbox.style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showImage(currentIndex - 1);
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showImage(currentIndex + 1);
+        });
+
+        closeBtn.addEventListener('click', () => {
             lightbox.style.display = 'none';
             document.body.style.overflow = 'auto';
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target === contentContainer) {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.style.display === 'flex') {
+                if (e.key === 'ArrowLeft') {
+                    showImage(currentIndex - 1);
+                } else if (e.key === 'ArrowRight') {
+                    showImage(currentIndex + 1);
+                } else if (e.key === 'Escape') {
+                    lightbox.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
         });
     }
 });
